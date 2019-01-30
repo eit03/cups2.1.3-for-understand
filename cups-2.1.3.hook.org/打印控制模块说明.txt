@@ -1,0 +1,28 @@
+1.该模块编译出libcups.so.2属于cups系统的系统库。
+2.本源码包是用来修改ippRead函数，加入打印机过滤挂钩，解决针对wps等软件只显示安全打印机时无法隐藏非安全打印的问题。
+问题的原因基本定位为：wps动态dlopen了libcups.so.2然后调用了其中的ippRead函数导致hack.so中的ippRead挂钩不起作用。
+3.编译该库时./configure后需要在Makedefs文件中加入-DHAVE_SSL -DHAVE_GNUTLS否则很可能会导致cups服务因为找不到tls相关的函数而启动失败，libcups.so.2还需要链接-lgnutls
+4.编译该库产生的libcups.so.2在FT机器上放置在/usr/lib/aarch64-gnu-linux目录在x86_64机器放置在/usr/lib/x86_64-gnu-linux目录。替换系统原有的libcups.so.2
+该库的替换可能需要找到与系统版本相同的cups库的源码。ubuntu下可以通过dpkg --list|grep cups查看libcups相关的版本。替换之后最好重启系统，至少要重启cups服务。
+5.修改了包中的cups/ipp.c加入了打印机hook,主要是ippRead函数
+
+
+// 2018-10-19
+6. 加入打印机hook白名单，在/usr/local/inforsecclient/Cfg/RetrievingPrinterWhitelist.psc中
+	# It is comment if the first char is # in every line, so it is ignore
+	# the null line who just has '\n' is ignored
+	# the whitespace is not ignored, please be attention.
+	# NAME_MAX ==> depend system
+	# cupsd is the process that belong cups frame
+	# cupsd SecClientAgent CentOutServer ...
+
+// 2019-01-30
+7. install guide:
+  	7.1 apt isntall libgnutls28-dev
+    		gnutls/gnutls.h
+    		--enable-gnutls --enable-ssl
+  	7.2 apt install libsystemd-dev
+    		--enable-systemd
+    		#define HAVE_SYSTEMD 1
+    		cupsd: On-demand support not compiled
+	7.3 ./configure --enable-debug --enable-systemd --enable-gnutls --enable-ssl
