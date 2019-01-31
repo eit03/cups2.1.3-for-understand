@@ -221,11 +221,6 @@ cupsdCancelJobs(const char *dest,	/* I - Destination to cancel */
  *                      is available.
  */
 
-///> 1. stop the job who has been sent SIGKILL signal, kill.
-///  2. stop the job who has been sent SIGTERM signal, cancle.
-///  3. continue the job who has been pended since filter limit.
-///  4. continue the job who data was ready.
-
 void
 cupsdCheckJobs(void)
 {

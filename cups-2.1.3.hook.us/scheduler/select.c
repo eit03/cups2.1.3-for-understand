@@ -208,7 +208,6 @@ static struct kevent	*cupsd_kqueue_events = NULL;
 static int		cupsd_alloc_pollfds = 0,
 			cupsd_update_pollfds = 0;
 static struct pollfd	*cupsd_pollfds = NULL;
-
 #  ifdef HAVE_EPOLL
 static int		cupsd_epoll_fd = -1;
 static struct epoll_event *cupsd_epoll_events = NULL;

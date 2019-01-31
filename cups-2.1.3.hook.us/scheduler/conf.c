@@ -260,11 +260,8 @@ cupsdCheckPermissions(
   * See if we can stat the file/directory...
   */
 
-  ///> lstat() is identical to stat(), except that if pathname is a symbolic link,
-  /// then it returns information about the link itself, not the file that it refers to.
   if (lstat(filename, &fileinfo))
   {
-    // ENOENT: A component of pathname does not exist, or pathname is an empty string.
     if (errno == ENOENT && create_dir)
     {
       if (create_dir > 0)

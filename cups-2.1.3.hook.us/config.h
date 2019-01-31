@@ -1,7 +1,8 @@
+/* config.h.  Generated from config.h.in by configure.  */
 /*
- * "$Id: config.h 12998 2015-12-02 15:09:04Z msweet $"
+ * "$Id: config.h.in 12687 2015-06-03 17:19:04Z msweet $"
  *
- * Configuration file for CUPS and Xcode.
+ * Configuration file for CUPS.
  *
  * Copyright 2007-2015 by Apple Inc.
  * Copyright 1997-2007 by Easy Software Products.
@@ -16,32 +17,30 @@
 #ifndef _CUPS_CONFIG_H_
 #define _CUPS_CONFIG_H_
 
-#include <AvailabilityMacros.h>
-
 /*
  * Version of software...
  */
 
-#define CUPS_SVERSION "CUPS v2.1.2"
-#define CUPS_MINIMAL "CUPS/2.1.2"
+#define CUPS_SVERSION "CUPS v2.1.3"
+#define CUPS_MINIMAL "CUPS/2.1.3"
 
 
 /*
  * Default user and groups...
  */
 
-#define CUPS_DEFAULT_USER "_lp"
-#define CUPS_DEFAULT_GROUP "_lp"
-#define CUPS_DEFAULT_SYSTEM_GROUPS "admin"
-#define CUPS_DEFAULT_PRINTOPERATOR_AUTH "@AUTHKEY(system.print.operator) @admin @lpadmin"
-#define CUPS_DEFAULT_SYSTEM_AUTHKEY "system.print.admin"
+#define CUPS_DEFAULT_USER "lp"
+#define CUPS_DEFAULT_GROUP "lp"
+#define CUPS_DEFAULT_SYSTEM_GROUPS "lpadmin sys root"
+#define CUPS_DEFAULT_PRINTOPERATOR_AUTH "@SYSTEM"
+#define CUPS_DEFAULT_SYSTEM_AUTHKEY ""
 
 
 /*
  * Default file permissions...
  */
 
-#define CUPS_DEFAULT_CONFIG_FILE_PERM 0644
+#define CUPS_DEFAULT_CONFIG_FILE_PERM 0640
 #define CUPS_DEFAULT_LOG_FILE_PERM 0644
 
 
@@ -50,7 +49,7 @@
  */
 
 #define CUPS_DEFAULT_LOG_LEVEL "warn"
-#define CUPS_DEFAULT_ACCESS_LOG_LEVEL "actions"
+#define CUPS_DEFAULT_ACCESS_LOG_LEVEL "none"
 
 
 /*
@@ -65,7 +64,7 @@
  */
 
 #define CUPS_DEFAULT_BROWSING 1
-#define CUPS_DEFAULT_BROWSE_LOCAL_PROTOCOLS "dnssd"
+#define CUPS_DEFAULT_BROWSE_LOCAL_PROTOCOLS ""
 #define CUPS_DEFAULT_DEFAULT_SHARED 1
 
 
@@ -80,7 +79,7 @@
  * Default printcap file...
  */
 
-#define CUPS_DEFAULT_PRINTCAP "/Library/Preferences/org.cups.printers.plist"
+#define CUPS_DEFAULT_PRINTCAP "/etc/printcap"
 
 
 /*
@@ -88,7 +87,7 @@
  */
 
 #define CUPS_DEFAULT_SMB_CONFIG_FILE ""
-#define CUPS_DEFAULT_LPD_CONFIG_FILE "launchd:///System/Library/LaunchDaemons/org.cups.cups-lpd.plist"
+#define CUPS_DEFAULT_LPD_CONFIG_FILE ""
 
 
 /*
@@ -102,14 +101,14 @@
  * Do we have domain socket support, and if so what is the default one?
  */
 
-#define CUPS_DEFAULT_DOMAINSOCKET "/private/var/run/cupsd"
+#define CUPS_DEFAULT_DOMAINSOCKET "/var/run/cups/cups.sock"
 
 
 /*
  * Default WebInterface value...
  */
 
-#define CUPS_DEFAULT_WEBIF 0
+#define CUPS_DEFAULT_WEBIF 1
 
 
 /*
@@ -120,17 +119,17 @@
  */
 
 #define CUPS_BINDIR "/usr/bin"
-#define CUPS_CACHEDIR "/private/var/spool/cups/cache"
+#define CUPS_CACHEDIR "/var/cache/cups"
 #define CUPS_DATADIR "/usr/share/cups"
 #define CUPS_DOCROOT "/usr/share/doc/cups"
 #define CUPS_FONTPATH "/usr/share/cups/fonts"
 #define CUPS_LOCALEDIR "/usr/share/locale"
-#define CUPS_LOGDIR "/private/var/log/cups"
-#define CUPS_REQUESTS "/private/var/spool/cups"
+#define CUPS_LOGDIR "/var/log/cups"
+#define CUPS_REQUESTS "/var/spool/cups"
 #define CUPS_SBINDIR "/usr/sbin"
-#define CUPS_SERVERBIN "/usr/libexec/cups"
-#define CUPS_SERVERROOT "/private/etc/cups"
-#define CUPS_STATEDIR "/private/etc/cups"
+#define CUPS_SERVERBIN "/usr/lib/cups"
+#define CUPS_SERVERROOT "/etc/cups"
+#define CUPS_STATEDIR "/var/run/cups"
 
 
 /*
@@ -152,27 +151,24 @@
  * Do we have PAM stuff?
  */
 
-#ifndef HAVE_LIBPAM
-#define HAVE_LIBPAM 1
-#endif /* !HAVE_LIBPAM */
-
+#define HAVE_LIBPAM 0
 /* #undef HAVE_PAM_PAM_APPL_H */
-#define HAVE_PAM_SET_ITEM 1
-#define HAVE_PAM_SETCRED 1
+/* #undef HAVE_PAM_SET_ITEM */
+/* #undef HAVE_PAM_SETCRED */
 
 
 /*
  * Do we have <shadow.h>?
  */
 
-/* #undef HAVE_SHADOW_H */
+#define HAVE_SHADOW_H 1
 
 
 /*
  * Do we have <crypt.h>?
  */
 
-/* #undef HAVE_CRYPT_H */
+#define HAVE_CRYPT_H 1
 
 
 /*
@@ -222,8 +218,8 @@
  */
 
 #define HAVE_STRDUP 1
-#define HAVE_STRLCAT 1
-#define HAVE_STRLCPY 1
+/* #undef HAVE_STRLCAT */
+/* #undef HAVE_STRLCPY */
 
 
 /*
@@ -251,14 +247,14 @@
  * Do we have the ASL functions?
  */
 
-#define HAVE_ASL_H
+/* #undef HAVE_ASL_H */
 
 
 /*
  * Do we have the systemd journal functions?
  */
 
-/*#undef HAVE_SYSTEMD_SD_JOURNAL_H*/
+#define HAVE_SYSTEMD_SD_JOURNAL_H 1
 
 
 /*
@@ -273,7 +269,7 @@
  * What signal functions to use?
  */
 
-#define HAVE_SIGSET 1
+/* #undef HAVE_SIGSET */
 #define HAVE_SIGACTION 1
 
 
@@ -290,14 +286,14 @@
  */
 
 /* #undef HAVE_MALLINFO */
-/* #undef HAVE_MALLOC_H */
+#define HAVE_MALLOC_H 1
 
 
 /*
  * Do we have the POSIX ACL functions?
  */
 
-#define HAVE_ACL_INIT 1
+/* #undef HAVE_ACL_INIT */
 
 
 /*
@@ -311,8 +307,9 @@
  * Which encryption libraries do we have?
  */
 
-#define HAVE_CDSASSL 1
-/* #undef HAVE_GNUTLS */
+/* #undef HAVE_CDSASSL */
+#define HAVE_GNUTLS 1
+/* #undef HAVE_SSPISSL */
 #define HAVE_SSL 1
 
 
@@ -320,27 +317,27 @@
  * Do we have the gnutls_transport_set_pull_timeout_function function?
  */
 
-/* #undef HAVE_GNUTLS_TRANSPORT_SET_PULL_TIMEOUT_FUNCTION */
+#define HAVE_GNUTLS_TRANSPORT_SET_PULL_TIMEOUT_FUNCTION 1
 
 
 /*
  * Do we have the gnutls_priority_set_direct function?
  */
 
-/* #undef HAVE_GNUTLS_PRIORITY_SET_DIRECT */
+#define HAVE_GNUTLS_PRIORITY_SET_DIRECT 1
 
 
 /*
  * What Security framework headers do we have?
  */
 
-#define HAVE_AUTHORIZATION_H 1
+/* #undef HAVE_AUTHORIZATION_H */
 /* #undef HAVE_SECBASEPRIV_H */
-#define HAVE_SECCERTIFICATE_H 1
+/* #undef HAVE_SECCERTIFICATE_H */
 /* #undef HAVE_SECIDENTITYSEARCHPRIV_H */
-#define HAVE_SECITEM_H 1
+/* #undef HAVE_SECITEM_H */
 /* #undef HAVE_SECITEMPRIV_H */
-#define HAVE_SECPOLICY_H 1
+/* #undef HAVE_SECPOLICY_H */
 /* #undef HAVE_SECPOLICYPRIV_H */
 /* #undef HAVE_SECURETRANSPORTPRIV_H */
 
@@ -349,7 +346,7 @@
  * Do we have the cssmErrorString function?
  */
 
-#define HAVE_CSSMERRORSTRING 1
+/* #undef HAVE_CSSMERRORSTRING */
 
 
 /*
@@ -363,16 +360,14 @@
  * Do we have the SecKeychainOpen function?
  */
 
-#define HAVE_SECKEYCHAINOPEN 1
+/* #undef HAVE_SECKEYCHAINOPEN */
 
 
 /*
  * Do we have (a working) SSLSetEnabledCiphers function?
  */
 
-#ifdef AVAILABLE_MAC_OS_X_VERSION_10_11_AND_LATER
-#  define HAVE_SSLSETENABLEDCIPHERS 1
-#endif /* AVAILABLE_MAC_OS_X_VERSION_10_11_AND_LATER */
+/* #undef HAVE_SSLSETENABLEDCIPHERS */
 
 
 /*
@@ -386,7 +381,7 @@
  * Do we have mDNSResponder for DNS Service Discovery (aka Bonjour)?
  */
 
-#define HAVE_DNSSD 1
+/* #undef HAVE_DNSSD */
 
 
 /*
@@ -407,7 +402,7 @@
  * Does the "stat" structure contain the "st_gen" member?
  */
 
-#define HAVE_ST_GEN 1
+/* #undef HAVE_ST_GEN */
 
 
 /*
@@ -470,7 +465,7 @@
  * Do we have the <sys/sockio.h> header file?
  */
 
-#define HAVE_SYS_SOCKIO_H 1
+/* #undef HAVE_SYS_SOCKIO_H */
 
 
 /*
@@ -491,9 +486,16 @@
  * Do we have launchd support?
  */
 
-#define HAVE_LAUNCH_H 1
-#define HAVE_LAUNCHD 1
-#define HAVE_LAUNCH_ACTIVATE_SOCKET 1
+/* #undef HAVE_LAUNCH_H */
+/* #undef HAVE_LAUNCHD */
+/* #undef HAVE_LAUNCH_ACTIVATE_SOCKET */
+
+
+/*
+ * Do we have systemd support?
+ */
+
+#define HAVE_SYSTEMD 1
 
 
 /*
@@ -504,8 +506,8 @@
 #define CUPS_JAVA "/usr/bin/java"
 #define HAVE_PERL 1
 #define CUPS_PERL "/usr/bin/perl"
-#define HAVE_PHP 1
-#define CUPS_PHP "/usr/bin/php"
+/* #undef HAVE_PHP */
+#define CUPS_PHP ""
 #define HAVE_PYTHON 1
 #define CUPS_PYTHON "/usr/bin/python"
 
@@ -532,7 +534,7 @@
  * Do we have CoreFoundation public and private headers?
  */
 
-#define HAVE_COREFOUNDATION_H 1
+/* #undef HAVE_COREFOUNDATION_H */
 /* #undef HAVE_CFPRIV_H */
 /* #undef HAVE_CFBUNDLEPRIV_H */
 
@@ -541,31 +543,31 @@
  * Do we have ApplicationServices public headers?
  */
 
-#define HAVE_APPLICATIONSERVICES_H 1
+/* #undef HAVE_APPLICATIONSERVICES_H */
 
 
 /*
  * Do we have the SCDynamicStoreCopyComputerName function?
  */
 
-#define HAVE_SCDYNAMICSTORECOPYCOMPUTERNAME 1
+/* #undef HAVE_SCDYNAMICSTORECOPYCOMPUTERNAME */
 
 
 /*
  * Do we have OS X 10.4's mbr_XXX functions?
  */
 
-#define HAVE_MEMBERSHIP_H 1
+/* #undef HAVE_MEMBERSHIP_H */
 /* #undef HAVE_MEMBERSHIPPRIV_H */
-#define HAVE_MBR_UID_TO_UUID 1
+/* #undef HAVE_MBR_UID_TO_UUID */
 
 
 /*
  * Do we have Darwin's notify_post header and function?
  */
 
-#define HAVE_NOTIFY_H 1
-#define HAVE_NOTIFY_POST 1
+/* #undef HAVE_NOTIFY_H */
+/* #undef HAVE_NOTIFY_POST */
 
 
 /*
@@ -574,17 +576,18 @@
 
 /* #undef HAVE_DBUS */
 /* #undef HAVE_DBUS_MESSAGE_ITER_INIT_APPEND */
+/* #undef HAVE_DBUS_THREADS_INIT */
 
 
 /*
  * Do we have the GSSAPI support library (for Kerberos support)?
  */
 
-#define HAVE_GSS_ACQUIRE_CRED_EX_F 1
-#define HAVE_GSS_C_NT_HOSTBASED_SERVICE 1
-#define HAVE_GSS_GSSAPI_H 1
+/* #undef HAVE_GSS_ACQUIRE_CRED_EX_F */
+/* #undef HAVE_GSS_C_NT_HOSTBASED_SERVICE */
+/* #undef HAVE_GSS_GSSAPI_H */
 /* #undef HAVE_GSS_GSSAPI_SPI_H */
-#define HAVE_GSSAPI 1
+/* #undef HAVE_GSSAPI */
 /* #undef HAVE_GSSAPI_GSSAPI_H */
 /* #undef HAVE_GSSAPI_H */
 
@@ -601,15 +604,15 @@
  */
 
 #define HAVE_POLL 1
-/* #undef HAVE_EPOLL */
-#define HAVE_KQUEUE 1
+#define HAVE_EPOLL 1
+/* #undef HAVE_KQUEUE */
 
 
 /*
  * Do we have the <dlfcn.h> header?
  */
 
-#define HAVE_DLFCN_H 1
+/* #undef HAVE_DLFCN_H */
 
 
 /*
@@ -623,34 +626,34 @@
  * Do we have <sys/ucred.h>?
  */
 
-#define HAVE_SYS_UCRED_H 1
+/* #undef HAVE_SYS_UCRED_H */
 
 
 /*
  * Do we have removefile()?
  */
 
-#define HAVE_REMOVEFILE 1
+/* #undef HAVE_REMOVEFILE */
 
 
 /*
  * Do we have <sandbox.h>?
  */
 
-#define HAVE_SANDBOX_H 1
+/* #undef HAVE_SANDBOX_H */
 
 
 /*
  * Which random number generator function to use...
  */
 
-#define HAVE_ARC4RANDOM 1
+/* #undef HAVE_ARC4RANDOM */
 #define HAVE_RANDOM 1
 #define HAVE_LRAND48 1
 
 #ifdef HAVE_ARC4RANDOM
 #  define CUPS_RAND() arc4random()
-#  define CUPS_SRAND(v) arc4random_stir()
+#  define CUPS_SRAND(v)
 #elif defined(HAVE_RANDOM)
 #  define CUPS_RAND() random()
 #  define CUPS_SRAND(v) srandom(v)
@@ -691,23 +694,23 @@
 #define HAVE_STATFS 1
 #define HAVE_STATVFS 1
 #define HAVE_SYS_MOUNT_H 1
-/* #undef HAVE_SYS_STATFS_H */
+#define HAVE_SYS_STATFS_H 1
 #define HAVE_SYS_STATVFS_H 1
-/* #undef HAVE_SYS_VFS_H */
+#define HAVE_SYS_VFS_H 1
 
 
 /*
  * Location of OS X localization bundle, if any.
  */
 
-#define CUPS_BUNDLEDIR "/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/PrintCore.framework/Versions/A"
+/* #undef CUPS_BUNDLEDIR */
 
 
 /*
  * Do we have XPC?
  */
 
-#define HAVE_XPC 1
+/* #undef HAVE_XPC */
 /* #undef HAVE_XPC_PRIVATE_H */
 
 
@@ -738,5 +741,5 @@ static __inline int _cups_abs(int i) { return (i < 0 ? -i : i); }
 #endif /* !_CUPS_CONFIG_H_ */
 
 /*
- * End of "$Id: config.h 12998 2015-12-02 15:09:04Z msweet $".
+ * End of "$Id: config.h.in 12687 2015-06-03 17:19:04Z msweet $".
  */
