@@ -57,7 +57,8 @@ struct _cups_array_s			/**** CUPS array structure ****/
   cups_array_func_t	compare;	/* Element comparison function */
   void			*data;		/* User data passed to compare */
   cups_ahash_func_t	hashfunc;	/* Hash function */
-  int			hashsize,	/* Size of hash */
+  int			hashsize,	/* Size of hash */ 
+					///> count of int type
 			*hash;		/* Hash array */
   cups_acopy_func_t	copyfunc;	/* Copy function */
   cups_afree_func_t	freefunc;	/* Free function */

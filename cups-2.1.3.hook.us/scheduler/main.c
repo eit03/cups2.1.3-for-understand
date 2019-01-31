@@ -86,6 +86,7 @@ static void		usage(int status) __attribute__((noreturn));
 
 static int		parent_signal = 0;
 					/* Set to signal number from child */
+					///< Parent ends waiting 
 static int		holdcount = 0;	/* Number of times "hold" was called */
 #if defined(HAVE_SIGACTION) && !defined(HAVE_SIGSET)
 static sigset_t		holdmask;	/* Old POSIX signal mask */
@@ -108,6 +109,7 @@ main(int  argc,				/* I - Number of command-line args */
   char			*opt;		/* Option character */
   int			close_all = 1,	/* Close all file descriptors? */
 			disconnect = 1,	/* Disconnect from controlling terminal? */
+				        ///< setsid()
 			fg = 0,		/* Run in foreground? */
 			run_as_child = 0;
 					/* Running as child process? */
@@ -142,6 +144,7 @@ main(int  argc,				/* I - Number of command-line args */
   * Check for setuid invocation, which we do not support!
   */
 
+  // file permissions: r w x s t
   if (getuid() != geteuid())
   {
     fputs("cupsd: Cannot run as a setuid program.\n", stderr);
@@ -165,6 +168,17 @@ main(int  argc,				/* I - Number of command-line args */
   }
 #endif /* HAVE_LAUNCHD */
 
+  // argv[0] programe full path
+  
+  //Usage: cupsd [options]
+  //Options:
+  //  -c cupsd.conf           Set cupsd.conf file to use.
+  //  -f                      Run in the foreground.
+  //  -F                      Run in the foreground but detach from console.
+  //  -h                      Show this usage message.
+  //  -l                      Run cupsd on demand.
+  //  -t                      Test the configuration file.
+
   for (i = 1; i < argc; i ++)
     if (argv[i][0] == '-')
       for (opt = argv[i] + 1; *opt != '\0'; opt ++)
@@ -175,7 +189,7 @@ main(int  argc,				/* I - Number of command-line args */
 	      fg           = 1;
 	      close_all    = 0;
 
-	  case 'c' : /* Configuration file */
+	  case 'c' : /* Configuration file */ ///> cupsd.conf
 	      i ++;
 	      if (i >= argc)
 	      {
@@ -325,6 +339,8 @@ main(int  argc,				/* I - Number of command-line args */
   if (!ConfigurationFile)
     cupsdSetString(&ConfigurationFile, CUPS_SERVERROOT "/cupsd.conf");
 
+  ///> \v CupsFilesFile is null when main function args was no -s option,
+  /// the use cups-files.conf file in same dir with \v ConfigurationFile.
   if (!CupsFilesFile)
   {
     char	*filename,		/* Copy of cupsd.conf filename */
@@ -418,7 +434,6 @@ main(int  argc,				/* I - Number of command-line args */
 #ifdef HAVE_SIGSET /* Use System V signals over POSIX to avoid bugs */
     sigset(SIGUSR1, parent_handler);
     sigset(SIGCHLD, parent_handler);
-
     sigset(SIGHUP, SIG_IGN);
 #elif defined(HAVE_SIGACTION)
     memset(&action, 0, sizeof(action));
@@ -446,12 +461,26 @@ main(int  argc,				/* I - Number of command-line args */
       * might be sent by the init script to restart the scheduler...
       */
 
+      ///> wait child signal (SIGUSR1 or SIGCHLD) to set parent_signal = <signum>;
       for (; parent_signal == 0;)
         sleep(1);
 
       if (parent_signal == SIGUSR1)
         return (0);
 
+      ///> The wait() system call suspends execution of the calling process 
+      /// until one of its children terminates.  
+      /// The call wait(&status) is equivalent to: waitpid(-1, &status, 0);
+      
+      ///> WIFEXITED(status) 这个宏用来指出子进程是否为正常退出的�
+      /// 如果是，它会返回一个非零值�
+      
+      ///> WEXITSTATUS(status) 当WIFEXITED返回非零值时，我们可以用这个宏来提取�
+      /// 进程的返回值，如果子进程调用exit(5)退出，WEXITSTATUS(status)就会返回5�
+      /// 如果进程不是正常退出的,也就是说,WIFEXITED返回0,这个值就毫无意义.
+      
+      ///> WTERMSIG宏测试被执行�若成功返回被终止的子进程的信号�
+      /// 返回的信号值被定义在sys/signals.h头文件中.
       if (wait(&i) < 0)
       {
         perror("cupsd");

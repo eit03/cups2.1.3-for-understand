@@ -601,8 +601,8 @@
  */
 
 #define HAVE_POLL 1
-/* #undef HAVE_EPOLL */
-#define HAVE_KQUEUE 1
+#define HAVE_EPOLL 1
+#undef HAVE_KQUEUE
 
 
 /*
