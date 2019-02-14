@@ -137,7 +137,10 @@ main(int  argc,				/* I - Number of command-line args */
   int			service_idle_exit;
 					/* Idle exit on select timeout? */
 #endif /* HAVE_LAUNCHD || HAVE_SYSTEMD */
-
+  
+  ///> add for debug
+  if (getenv("EIT_GIT_DEBUG"))
+    sleep(1);
 
 #ifdef HAVE_GETEUID
  /*
@@ -452,6 +455,10 @@ main(int  argc,				/* I - Number of command-line args */
 
     signal(SIGHUP, SIG_IGN);
 #endif /* HAVE_SIGSET */
+    
+    ///> add for debug
+    if (getenv("EIT_GIT_DEBUG"))
+      sleep(1);
 
     if (fork() > 0)
     {
@@ -498,6 +505,10 @@ main(int  argc,				/* I - Number of command-line args */
 	return (3);
       }
     }
+    
+    ///> add for debug
+    if (getenv("EIT_GIT_DEBUG"))
+      sleep(1);
 
 #if defined(__OpenBSD__) && OpenBSD < 201211
    /*
