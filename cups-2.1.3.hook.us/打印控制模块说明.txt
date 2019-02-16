@@ -26,3 +26,50 @@
     		#define HAVE_SYSTEMD 1
     		cupsd: On-demand support not compiled
 	7.3 ./configure --enable-debug --enable-systemd --enable-gnutls --enable-ssl
+
+//2019-02-16
+job.c:cupsdCleanJobs()
+	use unlink() to delete source pdf.
+job.c:cupsdCheckJobs()
+	...
+	// if printer is no job, and printer is idle, start job.
+	if (!printer->job && printer->state == IPP_PRINTER_IDLE)
+        {
+	 /*
+	  * Start the job...
+	  */
+
+	  cupsArraySave(ActiveJobs);
+	  start_job(job, printer);
+	  cupsArrayRestore(ActiveJobs);
+	}
+	...
+job.c:cupsdContinueJob()
+	make job, do task.
+printers.c:cupsdSetPrinterState()
+	set printer status
+
+// set printer status as processing
+0	cupsdSetPrinterState	printers.c	2682	0x44ae1b	
+1	start_job	job.c	4612	0x43ab2a	
+2	cupsdCheckJobs	job.c	394	0x430958	
+3	print_job	ipp.c	8338	0x429f6f	
+4	cupsdProcessIPPRequest	ipp.c	437	0x4185d5	
+5	cupsdReadClient	client.c	2054	0x411030	
+6	cupsdDoSelect	select.c	486	0x451f0b	
+7	main	main.c	804	0x44029c
+// do job
+0	cupsdContinueJob	job.c	549	0x430d32	
+1	start_job	job.c	4755	0x43b139	
+2	cupsdCheckJobs	job.c	394	0x430958	
+3	print_job	ipp.c	8338	0x429f6f	
+4	cupsdProcessIPPRequest	ipp.c	437	0x4185d5	
+5	cupsdReadClient	client.c	2054	0x411030	
+6	cupsdDoSelect	select.c	486	0x451f0b	
+7	main	main.c	804	0x44029c	
+// set printer status as idle
+0	cupsdSetPrinterState	printers.c	2682	0x44ae1b	
+1	finalize_job	job.c	3495	0x437ef4	
+2	update_job	job.c	5220	0x43c3e1	
+3	cupsdDoSelect	select.c	486	0x451f0b	
+4	main	main.c	804	0x44029c	
