@@ -18,7 +18,7 @@
 
 // 2019-01-30
 7. install guide:
-  	7.1 apt isntall libgnutls28-dev
+  	7.1 apt install libgnutls28-dev
     		gnutls/gnutls.h
     		--enable-gnutls --enable-ssl
   	7.2 apt install libsystemd-dev
