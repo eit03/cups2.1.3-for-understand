@@ -73,3 +73,18 @@ printers.c:cupsdSetPrinterState()
 2	update_job	job.c	5220	0x43c3e1	
 3	cupsdDoSelect	select.c	486	0x451f0b	
 4	main	main.c	804	0x44029c	
+
+  /*
+  * Now create processes for all of the filters...
+  */
+
+// if job file is pdf, and job file is pdf, jump filters.
+// it will solve peeding.
+// peeding is the reason that printer is busy, job.c:cupsdCheckJobs().
+
+//  if (job->filetypes && *job->filetypes && job->printer &&
+//      !strcmp("pdf", (**job->filetypes).type) &&
+//      !strcmp("cups-pdf:/", job->printer->device_uri))
+//  {
+//  }
+//  else
